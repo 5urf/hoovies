@@ -3064,13 +3064,6 @@
     "snapdragon" "^0.8.1"
     "to-regex" "^3.0.1"
 
-"expo-app-loading@~2.1.0":
-  "integrity" "sha512-txHH76rEKveKP5KK8EvlqxzGcSpuERe4bR+D7JO5tP2QYzuIXjg7v62ktvbJq+M8DiCgp7AjCqBDHnkfGkyNxA=="
-  "resolved" "https://registry.npmjs.org/expo-app-loading/-/expo-app-loading-2.1.0.tgz"
-  "version" "2.1.0"
-  dependencies:
-    "expo-splash-screen" "~0.16.0"
-
 "expo-application@~4.2.2":
   "integrity" "sha512-bFEaFRUdV6aK2iBd+HzkHNPYsyj88EAhaQW5leznmO0qQMJxpAQ3eoUXMey1hfDBh1qgkkHgSyCZ9BIgMAGJ1g=="
   "resolved" "https://registry.npmjs.org/expo-application/-/expo-application-4.2.2.tgz"
@@ -3141,7 +3134,7 @@
     "compare-versions" "^3.4.0"
     "invariant" "^2.2.4"
 
-"expo-splash-screen@~0.16.0", "expo-splash-screen@~0.16.1":
+"expo-splash-screen@~0.16.1":
   "integrity" "sha512-R3EUV5OM4RO+tb5XHgx9TNjaKCpHULo2CrIPbfZGnIdef3MeQucg4dNGw+Kiub9oKGPeExQfwtWqW+VXZqa0vg=="
   "resolved" "https://registry.npmjs.org/expo-splash-screen/-/expo-splash-screen-0.16.1.tgz"
   "version" "0.16.1"
