@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import AppLoading from "expo-app-loading";
 import { Text } from "react-native";
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import { Asset } from "expo-asset";
 export default function App() {
   const [ready, setReady] = useState(false);
   const onFinish = () => setReady(true);
   const startLoading = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await Font.loadAsync(Ionicons.font);
+    await Asset.loadAsync(require("./1234.jpeg"));
   };
   if (!ready) {
     return (
