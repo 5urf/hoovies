@@ -13,9 +13,9 @@ const ScreenTwo = ({ navigation: { navigate } }) => (
     <Text>go to Three</Text>
   </TouchableOpacity>
 );
-const ScreenThree = ({ navigation: { setOptions } }) => (
-  <TouchableOpacity onPress={() => setOptions({ title: "hello!" })}>
-    <Text>Change title</Text>
+const ScreenThree = ({ navigation: { navigate } }) => (
+  <TouchableOpacity onPress={() => navigate("Tabs", { screen: "Search" })}>
+    <Text>Go to Search</Text>
   </TouchableOpacity>
 );
 
@@ -27,11 +27,7 @@ const Stack = () => (
       headerBackTitleVisible: false,
     }}
   >
-    <NativeStack.Screen
-      options={{ title: "1" }}
-      name='One'
-      component={ScreenOne}
-    />
+    <NativeStack.Screen name='One' component={ScreenOne} />
     <NativeStack.Screen name='Two' component={ScreenTwo} />
     <NativeStack.Screen name='Three' component={ScreenThree} />
   </NativeStack.Navigator>

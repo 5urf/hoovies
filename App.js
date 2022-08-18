@@ -11,6 +11,7 @@ import {
 import Tabs from "./navigation/Tabs";
 import { useColorScheme } from "react-native";
 import Stack from "./navigation/Stack";
+import Root from "./navigation/Root";
 
 export default function App() {
   const [assets] = useAssets([require("./1234.jpeg")]);
@@ -21,7 +22,7 @@ export default function App() {
   }
   return (
     <NavigationContainer>
-      <Stack />
+      <Root />
     </NavigationContainer>
   );
 }
