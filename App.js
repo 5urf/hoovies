@@ -12,6 +12,8 @@ import Tabs from "./navigation/Tabs";
 import { useColorScheme } from "react-native";
 import Stack from "./navigation/Stack";
 import Root from "./navigation/Root";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./styled";
 
 export default function App() {
   const [assets] = useAssets([require("./1234.jpeg")]);
@@ -21,8 +23,10 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer>
-      <Root />
-    </NavigationContainer>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <NavigationContainer>
+        <Root />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
