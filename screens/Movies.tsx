@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import Swiper from "react-native-swiper";
-import { useQuery } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "react-query";
 import styled from "styled-components/native";
 import { moviesApi } from "../api";
 import HMedia from "../components/HMedia";
@@ -51,24 +51,25 @@ const HSeparator = styled.View`
 `;
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
-    "nowPlaying",
-    moviesApi.nowPlaying
-  );
+  const queryClient = useQueryClient();
+  const {
+    isLoading: nowPlayingLoading,
+    data: nowPlayingData,
+    isRefetching: isRefetchingNowPlaying,
+  } = useQuery(["movies", "nowPlaying"], moviesApi.nowPlaying);
 
-  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
-    "upcoming",
-    moviesApi.upcoming
-  );
-  const { isLoading: trendingLoading, data: trendingData } = useQuery(
-    "trending",
-    moviesApi.trending
-  );
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    isRefetching: isRefetchingUpcoming,
+  } = useQuery(["movies", "upcoming"], moviesApi.upcoming);
+  const {
+    isLoading: trendingLoading,
+    data: trendingData,
+    isRefetching: isRefetchingTrending,
+  } = useQuery(["movies", "trending"], moviesApi.trending);
   const onRefresh = async () => {
-    // setRefreshing(true);
-    // await getData();
-    // setRefreshing(false);
+    queryClient.refetchQueries(["movies"]);
   };
 
   const renderVMedia = ({ item }) => (
@@ -90,6 +91,9 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
 
   const moviewKeyExtractor = (item) => item.id + "";
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
+  const refreshing =
+    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
+
   return loading ? (
     <Loader>
       <ActivityIndicator />
