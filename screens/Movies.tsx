@@ -12,6 +12,7 @@ import Swiper from "react-native-swiper";
 import { QueryClient, useQuery, useQueryClient } from "react-query";
 import styled from "styled-components/native";
 import { MovieResponse, moviesApi } from "../api";
+import HList from "../components/HList";
 import HMedia from "../components/HMedia";
 import Loader from "../components/Loader";
 import Slide from "../components/Slide";
@@ -103,26 +104,9 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               />
             ))}
           </Swiper>
-          <ListContainer>
-            <ListTitle>Trending Movies</ListTitle>
-            {trendingData ? (
-              <TrendingScroll
-                data={trendingData.results}
-                horizontal
-                keyExtractor={(item) => item.id + ""}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 20 }}
-                ItemSeparatorComponent={VSeperator}
-                renderItem={({ item }) => (
-                  <VMedia
-                    posterPath={item.poster_path}
-                    originalTitle={item.original_title}
-                    voteAverage={item.vote_average}
-                  />
-                )}
-              />
-            ) : null}
-          </ListContainer>
+          {trendingData ? (
+            <HList title='Trending Movies' data={trendingData.results} />
+          ) : null}
           <ComingSoonTitle>Coming soon</ComingSoonTitle>
         </>
       }
