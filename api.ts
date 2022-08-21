@@ -7,7 +7,7 @@ const trending = () =>
     response.json()
   );
 
-const upComing = () =>
+const upcoming = () =>
   fetch(
     `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`
   ).then((response) => response.json());
@@ -16,3 +16,5 @@ const nowPlaying = () =>
   fetch(
     `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
   ).then((response) => response.json());
+
+export const moviesApi = { trending, upcoming, nowPlaying };
