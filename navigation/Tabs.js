@@ -38,7 +38,7 @@ const Tabs = () => {
       }}
     >
       <Tab.Screen
-        name='Movies'
+        name='영화'
         component={Movies}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
@@ -64,7 +64,7 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name='Search'
+        name='검색'
         component={Search}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
