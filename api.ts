@@ -13,7 +13,7 @@ export interface Movie {
   popularity: number;
   poster_path: string | null;
   release_date: string;
-  title: string;
+  title?: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
@@ -34,6 +34,7 @@ export interface TV {
   first_air_date: string;
   popularity: number;
   media_type: string;
+  title?: string;
 }
 
 interface BaseResponse {

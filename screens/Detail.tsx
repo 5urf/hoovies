@@ -1,6 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { Dimensions, StyleSheet, useColorScheme, Linking } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  useColorScheme,
+  Linking,
+  Platform,
+  Share,
+  TouchableOpacity,
+} from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Movie, moviesApi, TV, tvApi } from "../api";
@@ -70,10 +78,44 @@ const Detail: React.FC<DetailScreenProps> = ({
   route: { params },
 }) => {
   const isDark = useColorScheme() === "dark";
+
   const isMovie = "original_title" in params;
   const { isLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
     isMovie ? moviesApi.detail : tvApi.detail
+  );
+
+  const shareMedia = async () => {
+    const isAndroid = Platform.OS === "android";
+    const homepage = isMovie
+      ? `https://www.imdb.com/title/${data.imdb_id}/`
+      : data.hompage;
+    if (isAndroid) {
+      await Share.share({
+        url: isMovie
+          ? `https://www.imdb.com/title/${data.imdb_id}/`
+          : data.hompage,
+        message: `${params.overview}\nCheck it out: ${homepage}`,
+        title: params.title,
+      });
+    } else {
+      await Share.share({
+        // ios only
+        url: homepage,
+        // message: params.overview,
+        title: params.title,
+      });
+    }
+  };
+
+  const ShareButton = () => (
+    <TouchableOpacity onPress={shareMedia}>
+      <Ionicons
+        name='share-outline'
+        color={isDark ? "white" : "black"}
+        size={24}
+      />
+    </TouchableOpacity>
   );
 
   useEffect(() => {
@@ -81,6 +123,14 @@ const Detail: React.FC<DetailScreenProps> = ({
       title: "original_title" in params ? "영화 상세정보" : "TV 상세정보",
     });
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setOptions({
+        headerRight: () => <ShareButton />,
+      });
+    }
+  }, [data]);
 
   const openYTLink = async (videoId: string) => {
     const baseUrl = `http://m.youtube.com/watch?v=${videoId}`;
