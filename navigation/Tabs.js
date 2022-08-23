@@ -34,6 +34,7 @@ const Tabs = () => {
           fontSize: 12,
           fontWeight: "600",
         },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen
