@@ -91,6 +91,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
                 backdropPath={movie.backdrop_path || ""}
                 posterPath={movie.poster_path || ""}
                 originalTitle={movie.original_title}
+                // title={movie.title}
                 voteAverage={movie.vote_average}
                 overview={movie.overview}
                 fullData={movie}

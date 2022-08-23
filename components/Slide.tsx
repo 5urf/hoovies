@@ -83,7 +83,7 @@ const Slide: React.FC<SlidePorps> = ({
           <Wrapper>
             <Poster path={posterPath} />
             <Column>
-              <Title>{originalTitle}</Title>
+              <Title>{fullData.title}</Title>
               <Overview>{overview.slice(0, 90)}...</Overview>
               {voteAverage > 0 ? <Votes>⭐️{voteAverage}/10</Votes> : null}
             </Column>

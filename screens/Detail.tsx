@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Movie, TV } from "../api";
+import { Movie, moviesApi, TV, tvApi } from "../api";
 import Poster from "../components/Poster";
 import { makeImgPath } from "../utils";
 import { BLACK_COLOR } from "../color";
+import { useQuery } from "react-query";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -51,6 +52,23 @@ const Detail: React.FC<DetailScreenProps> = ({
   navigation: { setOptions },
   route: { params },
 }) => {
+  const { isLoading: moviesLoading, data: moviesData } = useQuery(
+    ["movies", params.id],
+    moviesApi.detail,
+    {
+      enabled: "original_title" in params,
+    }
+  );
+  const { isLoading: tvLoading, data: tvData } = useQuery(
+    ["tv", params.id],
+    tvApi.detail,
+    {
+      enabled: "original_name" in params,
+    }
+  );
+  console.log(moviesData);
+  console.log(tvData);
+
   useEffect(() => {
     setOptions({
       title: "original_title" in params ? "영화 상세정보" : "TV 상세정보",
@@ -71,9 +89,7 @@ const Detail: React.FC<DetailScreenProps> = ({
         <Column>
           <Poster path={params.poster_path || ""} />
           <Title>
-            {"original_title" in params
-              ? params.original_title
-              : params.original_name}
+            {"original_title" in params ? params.title : params.name}
           </Title>
         </Column>
       </Header>
