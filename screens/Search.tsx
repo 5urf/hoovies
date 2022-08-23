@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { Alert } from "react-native";
+import { useQuery } from "react-query";
 import styled from "styled-components/native";
+import { moviesApi, tvApi } from "../api";
 
 const Container = styled.ScrollView``;
 
@@ -13,8 +16,28 @@ const SearchBar = styled.TextInput`
 
 const Search = () => {
   const [query, setQuery] = useState("");
+  const {
+    isLoading: moviesLoading,
+    data: moviesData,
+    refetch: searchMovies,
+  } = useQuery(["searchMovies", query], moviesApi.search, {
+    enabled: false,
+  });
+
+  const {
+    isLoading: tvLoading,
+    data: tvData,
+    refetch: searchTv,
+  } = useQuery(["searchTv", query], tvApi.search, {
+    enabled: false,
+  });
   const onChangeText = (text: string) => setQuery(text);
-  console.log(query);
+  const onSubmit = () => {
+    if (query === "") {
+      return;
+    }
+    searchTv();
+  };
 
   return (
     <Container>
@@ -24,6 +47,7 @@ const Search = () => {
         // multiline={false}
         returnKeyType={"search"}
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit}
       />
     </Container>
   );
