@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, useColorScheme, Linking } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Movie, moviesApi, TV, tvApi } from "../api";
@@ -8,6 +8,9 @@ import Poster from "../components/Poster";
 import { makeImgPath } from "../utils";
 import { BLACK_COLOR } from "../color";
 import { useQuery } from "react-query";
+import Loader from "../components/Loader";
+import { Ionicons } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -31,15 +34,29 @@ const Title = styled.Text`
   font-weight: 500;
 `;
 
+const Data = styled.View`
+  padding: 0px 20px;
+`;
+
 const Overview = styled.Text`
   color: ${(props) => props.theme.textColor};
-  margin-top: 20px;
-  padding: 0px 20px;
+  margin: 20px 0px;
 `;
 
 const Column = styled.View`
   flex-direction: row;
   width: 60%;
+`;
+
+const VideoBtn = styled.TouchableOpacity`
+  flex-direction: row;
+`;
+const BtnText = styled.Text`
+  color: ${(props) => props.theme.textColor};
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 24px;
+  margin-left: 10px;
 `;
 
 type RootStackParamList = {
@@ -52,28 +69,25 @@ const Detail: React.FC<DetailScreenProps> = ({
   navigation: { setOptions },
   route: { params },
 }) => {
-  const { isLoading: moviesLoading, data: moviesData } = useQuery(
-    ["movies", params.id],
-    moviesApi.detail,
-    {
-      enabled: "original_title" in params,
-    }
+  const isDark = useColorScheme() === "dark";
+  const isMovie = "original_title" in params;
+  const { isLoading, data } = useQuery(
+    [isMovie ? "movies" : "tv", params.id],
+    isMovie ? moviesApi.detail : tvApi.detail
   );
-  const { isLoading: tvLoading, data: tvData } = useQuery(
-    ["tv", params.id],
-    tvApi.detail,
-    {
-      enabled: "original_name" in params,
-    }
-  );
-  console.log(moviesData);
-  console.log(tvData);
 
   useEffect(() => {
     setOptions({
       title: "original_title" in params ? "영화 상세정보" : "TV 상세정보",
     });
   }, []);
+
+  const openYTLink = async (videoId: string) => {
+    const baseUrl = `http://m.youtube.com/watch?v=${videoId}`;
+    // await Linking.openURL(baseUrl);
+    await WebBrowser.openBrowserAsync(baseUrl);
+  };
+
   return (
     <Container>
       <Header>
@@ -93,7 +107,20 @@ const Detail: React.FC<DetailScreenProps> = ({
           </Title>
         </Column>
       </Header>
-      <Overview>{params.overview}</Overview>
+      <Data>
+        <Overview>{params.overview}</Overview>
+        {isLoading ? <Loader /> : null}
+        {data?.videos.results?.slice(0, 5).map((video) => (
+          <VideoBtn key={video.key} onPress={() => openYTLink(video.key)}>
+            <Ionicons
+              name='logo-youtube'
+              color={isDark ? "white" : "black"}
+              size={24}
+            />
+            <BtnText>{video.name}</BtnText>
+          </VideoBtn>
+        ))}
+      </Data>
     </Container>
   );
 };

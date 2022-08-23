@@ -99,9 +99,9 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
             ))}
           </Swiper>
           {trendingData ? (
-            <HList title='Trending Movies' data={trendingData.results} />
+            <HList title='흥행 중인 영화' data={trendingData.results} />
           ) : null}
-          <ComingSoonTitle>Coming soon</ComingSoonTitle>
+          <ComingSoonTitle>개봉 예정 영화</ComingSoonTitle>
         </>
       }
       data={upcomingData.results}

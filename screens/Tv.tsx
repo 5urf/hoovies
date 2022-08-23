@@ -37,9 +37,9 @@ const Tv = () => {
       }
       contentContainerStyle={{ paddingVertical: 30 }}
     >
-      <HList title='Trending Tv' data={trendingData?.results} />
-      <HList title='Airing Today' data={todayData?.results} />
-      <HList title='Top Rated Tv' data={topData?.results} />
+      <HList title='인기있는 드라마' data={trendingData?.results} />
+      <HList title='오늘 방영하는 드라마' data={todayData?.results} />
+      <HList title='평점 높은 드라마' data={topData?.results} />
     </ScrollView>
   );
 };
