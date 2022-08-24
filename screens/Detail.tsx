@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -34,7 +34,7 @@ const Header = styled.View`
 const Background = styled.Image``;
 
 const Title = styled.Text`
-  color: white;
+  color: ${(props) => props.theme.textColor};
   font-size: 34px;
   align-self: flex-end;
 
@@ -44,6 +44,23 @@ const Title = styled.Text`
 
 const Data = styled.View`
   padding: 0px 20px;
+`;
+
+const InfoTxt = styled.Text`
+  color: ${(props) => props.theme.textColor};
+  margin-right: 5px;
+`;
+
+const InfoWrap = styled.View`
+  margin: 10px 0px;
+  flex-direction: row;
+`;
+
+const Tagline = styled.Text`
+  color: ${(props) => props.theme.textColor};
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 10px;
 `;
 
 const Overview = styled.Text`
@@ -78,12 +95,14 @@ const Detail: React.FC<DetailScreenProps> = ({
   route: { params },
 }) => {
   const isDark = useColorScheme() === "dark";
-
   const isMovie = "original_title" in params;
   const { isLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
     isMovie ? moviesApi.detail : tvApi.detail
   );
+  const [genres, setGenres] = useState([]);
+  const [tagline, setTagline] = useState("");
+  const [runtime, setRuntime] = useState(0);
 
   const shareMedia = async () => {
     const isAndroid = Platform.OS === "android";
@@ -127,6 +146,14 @@ const Detail: React.FC<DetailScreenProps> = ({
           </TouchableOpacity>
         ),
       });
+      const {
+        genres: movieGenres,
+        tagline: movieTagline,
+        runtime: movieRuntime,
+      } = data;
+      setGenres(movieGenres);
+      setTagline(movieTagline);
+      setRuntime(movieRuntime);
     }
   }, [data]);
 
@@ -156,6 +183,15 @@ const Detail: React.FC<DetailScreenProps> = ({
         </Column>
       </Header>
       <Data>
+        <Tagline>{tagline}</Tagline>
+        <InfoWrap>
+          {genres?.map((genre, i) => (
+            <InfoTxt key={genre.id}>
+              {genre.name} {i !== genres.length - 1 ? "◦" : ""}
+            </InfoTxt>
+          ))}
+          {runtime ? <InfoTxt>{runtime}분</InfoTxt> : null}
+        </InfoWrap>
         <Overview>{params.overview}</Overview>
         {isLoading ? <Loader /> : null}
         {data?.videos.results?.slice(0, 5).map((video) => (
