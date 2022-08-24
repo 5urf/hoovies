@@ -52,20 +52,24 @@ export const moviesApi = {
     fetch(
       `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&language=ko`
     ).then((res) => res.json()),
-  upcoming: () =>
+
+  upcoming: ({ pageParam }) =>
     fetch(
-      `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&page=1`
+      `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&page=${pageParam}`
     ).then((res) => res.json()),
+
   nowPlaying: () =>
     fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
     ).then((res) => res.json()),
+
   search: ({ queryKey }) => {
     const [_, query] = queryKey;
     return fetch(
       `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ko&page=1&query=${query}`
     ).then((res) => res.json());
   },
+
   detail: ({ queryKey }) => {
     const [_, id] = queryKey;
     return fetch(

@@ -58,11 +58,25 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   const { isLoading: nowPlayingLoading, data: nowPlayingData } =
     useQuery<MovieResponse>(["movies", "nowPlaying"], moviesApi.nowPlaying);
 
-  const { isLoading: upcomingLoading, data: upcomingData } =
-    useInfiniteQuery<MovieResponse>(["movies", "upcoming"], moviesApi.upcoming);
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery<MovieResponse>(
+    ["movies", "upcoming"],
+    moviesApi.upcoming,
+    {
+      getNextPageParam: (currentPage) => {
+        const nextPage = currentPage.page + 1;
+        return nextPage > currentPage.total_pages ? null : nextPage;
+      },
+    }
+  );
 
   const { isLoading: trendingLoading, data: trendingData } =
     useQuery<MovieResponse>(["movies", "trending"], moviesApi.trending);
+
   const onRefresh = async () => {
     setRefreshing(true);
     await queryClient.refetchQueries(["movies"]);
@@ -70,15 +84,19 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
+
   const loadMore = () => {
-    alert("load more!");
+    if (hasNextPage) {
+      fetchNextPage();
+    }
   };
+
   return loading ? (
     <Loader />
   ) : upcomingData ? (
     <FlatList
       onEndReached={loadMore}
-      onEndReachedThreshold={0.4} // onEndReached를 실행시키려는 목록 하단부터 끝까지 거리
+      onEndReachedThreshold={2} // onEndReached를 실행시키려는 목록 하단부터 끝까지 거리
       onRefresh={onRefresh}
       refreshing={refreshing}
       ListHeaderComponent={
