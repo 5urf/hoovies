@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   FlatList,
   RefreshControl,
@@ -9,7 +10,12 @@ import {
   View,
 } from "react-native";
 import Swiper from "react-native-swiper";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import styled from "styled-components/native";
 import { MovieResponse, moviesApi } from "../api";
 import HList from "../components/HList";
@@ -53,7 +59,8 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     useQuery<MovieResponse>(["movies", "nowPlaying"], moviesApi.nowPlaying);
 
   const { isLoading: upcomingLoading, data: upcomingData } =
-    useQuery<MovieResponse>(["movies", "upcoming"], moviesApi.upcoming);
+    useInfiniteQuery<MovieResponse>(["movies", "upcoming"], moviesApi.upcoming);
+
   const { isLoading: trendingLoading, data: trendingData } =
     useQuery<MovieResponse>(["movies", "trending"], moviesApi.trending);
   const onRefresh = async () => {
@@ -63,11 +70,15 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
-
+  const loadMore = () => {
+    alert("load more!");
+  };
   return loading ? (
     <Loader />
   ) : upcomingData ? (
     <FlatList
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.4} // onEndReached를 실행시키려는 목록 하단부터 끝까지 거리
       onRefresh={onRefresh}
       refreshing={refreshing}
       ListHeaderComponent={
@@ -104,7 +115,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
           <ComingSoonTitle>개봉 예정 영화</ComingSoonTitle>
         </>
       }
-      data={upcomingData.results}
+      data={upcomingData.pages.map((page) => page.results).flat()}
       keyExtractor={(item) => item.id + ""}
       ItemSeparatorComponent={HSeparator}
       renderItem={({ item }) => (
