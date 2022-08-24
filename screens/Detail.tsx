@@ -64,7 +64,7 @@ const BtnText = styled.Text`
   font-weight: 600;
   margin-bottom: 10px;
   line-height: 24px;
-  margin-left: 10px;
+  margin: 0 10px 10px 10px;
 `;
 
 type RootStackParamList = {
@@ -108,16 +108,6 @@ const Detail: React.FC<DetailScreenProps> = ({
     }
   };
 
-  const ShareButton = () => (
-    <TouchableOpacity onPress={shareMedia}>
-      <Ionicons
-        name='share-outline'
-        color={isDark ? "white" : "black"}
-        size={24}
-      />
-    </TouchableOpacity>
-  );
-
   useEffect(() => {
     setOptions({
       title: "original_title" in params ? "영화 상세정보" : "TV 상세정보",
@@ -127,7 +117,15 @@ const Detail: React.FC<DetailScreenProps> = ({
   useEffect(() => {
     if (data) {
       setOptions({
-        headerRight: () => <ShareButton />,
+        headerRight: () => (
+          <TouchableOpacity onPress={shareMedia}>
+            <Ionicons
+              name='share-outline'
+              color={isDark ? "white" : "black"}
+              size={24}
+            />
+          </TouchableOpacity>
+        ),
       });
     }
   }, [data]);
