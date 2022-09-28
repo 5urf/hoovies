@@ -120,7 +120,7 @@ const Detail: React.FC<DetailScreenProps> = ({
 
   useEffect(() => {
     setOptions({
-      title: "original_title" in params ? "영화 상세정보" : "TV 상세정보",
+      title: "original_title" in params ? "영화 상세정보" : "TV 정보",
     });
   }, []);
 
