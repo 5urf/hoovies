@@ -48,24 +48,30 @@ export interface MovieResponse extends BaseResponse {
 }
 
 export const moviesApi = {
-  trending: () =>
+  trending: ({ pageParam }) =>
     fetch(
-      `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&language=ko`
+      `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&language=ko&page=${
+        pageParam ? pageParam : 1
+      }`
     ).then((res) => res.json()),
-  upcoming: () =>
+
+  upcoming: ({ pageParam }) =>
     fetch(
-      `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&page=1`
+      `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&page=${pageParam}`
     ).then((res) => res.json()),
+
   nowPlaying: () =>
     fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko&page=1`
     ).then((res) => res.json()),
+
   search: ({ queryKey }) => {
     const [_, query] = queryKey;
     return fetch(
       `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ko&page=1&query=${query}`
     ).then((res) => res.json());
   },
+
   detail: ({ queryKey }) => {
     const [_, id] = queryKey;
     return fetch(
@@ -75,18 +81,22 @@ export const moviesApi = {
 };
 
 export const tvApi = {
-  trending: () =>
-    fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&language=ko`).then(
-      (res) => res.json()
-    ),
+  trending: ({ pageParam }) =>
+    fetch(
+      `${BASE_URL}/trending/tv/week?api_key=${API_KEY}&language=ko&page=${
+        pageParam ? pageParam : 1
+      }`
+    ).then((res) => res.json()),
   airingToday: () =>
     fetch(`${BASE_URL}/tv/airing_today?api_key=${API_KEY}&language=ko`).then(
       (res) => res.json()
     ),
-  topRated: () =>
-    fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=ko`).then(
-      (res) => res.json()
-    ),
+  topRated: ({ pageParam }) =>
+    fetch(
+      `${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=ko&page=${
+        pageParam ? pageParam : 1
+      }`
+    ).then((res) => res.json()),
   search: ({ queryKey }) => {
     const [_, query] = queryKey;
     return fetch(
