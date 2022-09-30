@@ -1,6 +1,7 @@
 ## hoovies
 
 - React-Native 영화 App
+- https://lizard-rail-d6e.notion.site/hoovies-3b60efcf3611475a997ddab19e1c487f
 
 ---
 
